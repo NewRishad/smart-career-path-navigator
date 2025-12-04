@@ -1,0 +1,23 @@
+# Dependencies and package manager files
+node_modules/
+yarn.lock
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python Virtual Environment
+.venv/
+
+# Build and Compilation Output
+dist/
+build/
+.vite/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Sensitive Environment Variables
+.env
+.env.local
+.env.*.local
