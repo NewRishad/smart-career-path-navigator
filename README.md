@@ -14,3 +14,6 @@ jac serve app.jac
 ```
 
 Happy coding with Jac!
+
+An intelligent platform that helps users discover their career paths harnessing the power of AI
+
