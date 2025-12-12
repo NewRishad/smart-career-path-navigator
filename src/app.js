@@ -1,6 +1,7 @@
 import {__jacJsx, __jacSpawn} from "@jac-client/utils";
 import { useState, useEffect } from "react";
 import { Router, Routes, Route, Link, Navigate, useNavigate, jacLogin, jacSignup, jacLogout, jacIsLoggedIn } from "@jac-client/utils";
+import "./global.css";
 function HomePage() {
   if (jacIsLoggedIn()) {
     return __jacJsx(Navigate, {"to": "/dashboard"}, []);
@@ -87,7 +88,7 @@ function Navbar() {
   return __jacJsx("nav", {"style": {"padding": "12px 24px", "background": "#3b82f6", "color": "#ffffff", "display": "flex", "justifyContent": "space-between"}}, [__jacJsx("div", {"style": {"fontWeight": "600"}}, ["Todo App"]), __jacJsx("div", {"style": {"display": "flex", "gap": "16px"}}, [__jacJsx(Link, {"to": "/login", "style": {"color": "#ffffff", "textDecoration": "none"}}, ["Login"]), __jacJsx(Link, {"to": "/signup", "style": {"color": "#ffffff", "textDecoration": "none"}}, ["Sign Up"])])]);
 }
 function DashboardPage() {
-  return __jacJsx("div", {}, [__jacJsx("h1", {}, ["⚠️ Dashboard page in progress"])]);
+  return __jacJsx("div", {"class": "flex flex-col items-center gap-6 p-7 md:flex-row rounded-2xl"}, [__jacJsx("div", {}, [__jacJsx("img", {"class": "size-48 shadow-xl rounded-md", "alt": "", "src": "/static/assets/cover.png"}, [])]), __jacJsx("div", {"class": "flex items-center"}, [__jacJsx("span", {"class": "text-2xl font-medium"}, ["Class Warfare"]), __jacJsx("span", {"class": "font-medium text-sky-500"}, ["The Anti-Patterns"]), __jacJsx("span", {"class": "flex gap-2 font-medium text-gray-600 dark:text-gray-400"}, [__jacJsx("span", {}, ["No. 4"]), __jacJsx("span", {}, ["·"]), __jacJsx("span", {}, ["2025"])])])]);
 }
 function app() {
   return __jacJsx(Router, {}, [__jacJsx(Navbar, {}, []), __jacJsx(Routes, {}, [__jacJsx(Route, {"path": "/", "element": __jacJsx(HomePage, {}, [])}, []), __jacJsx(Route, {"path": "/login", "element": __jacJsx(LoginPage, {}, [])}, []), __jacJsx(Route, {"path": "/signup", "element": __jacJsx(SignupPage, {}, [])}, []), __jacJsx(Route, {"path": "/dashboard", "element": __jacJsx(DashboardPage, {}, [])}, []), __jacJsx(Route, {"path": "*", "element": __jacJsx(NotFoundPage, {}, [])}, [])])]);

@@ -14,15 +14,17 @@
   "description": "Jac application: smart-career-path-navigator",
   "type": "module",
   "devDependencies": {
-    "vite": "^6.4.1",
     "@babel/cli": "^7.28.3",
     "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
-    "@babel/preset-react": "^7.28.5"
+    "@babel/preset-react": "^7.28.5",
+    "vite": "^6.4.1"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^6.30.1"
+    "react-router-dom": "^6.30.1",
+    "tailwindcss": "^4.1.18"
   }
 }

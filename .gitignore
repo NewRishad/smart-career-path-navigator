@@ -9,6 +9,10 @@ yarn-error.log*
 .venv/
 .jac-env/
 
+# Temp raw data
+lightcast_skills.json
+lightcast_roles.json
+
 # Build and Compilation Output
 dist/
 build/
