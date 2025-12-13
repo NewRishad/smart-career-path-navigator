@@ -27,165 +27,44 @@ cl {
         return <Navigate to="/login" />;
     }
 
-    # Login page Componenet ---------------------------------------
-    # def LoginPage() -> any {
-    #     let [username, setUsername] = useState("");
-    #     let [password, setPassword] = useState("");
-    #     let [error, setError] = useState("");
+    def LoginPage(props: any) -> any {
+        let [username, setUsername] = useState("");
+        let [password, setPassword] = useState("");
+        let [error, setError] = useState("");
 
-    #     # Check if already logged in
-    #     if jacIsLoggedIn() {
-    #         return <div style={{"padding": "20px"}}>
-    #             <h2>You're already logged in</h2>
-    #             <button onClick={lambda -> None { jacLogout(); }}>
-    #                 Logout
-    #             </button>
-    #         </div>;
-    #     }
-
-    #     async def handleLogin(e: any) -> None {
-    #         e.preventDefault();
-    #         setError("");
-
-    #         if not username or not password {
-    #             setError("Please fill in all fields");
-    #             return;
-    #         }
-
-    #         success = await jacLogin(username, password);
-    #         if success {
-    #             # Navigate to dashboard 
-    #             window.location.href = "/page/app#/dashboard"; # What is the # about after app
-    #         } else {
-    #             setError("Invalid credentials");
-    #         }
-    #     }
-
-    #     def handleUsernameChange(e: any) -> None {
-    #         setUsername(e.target.value);
-    #     }
-
-    #     def handlePasswordChange(e: any) -> None {
-    #         setPassword(e.target.value);
-    #     }
-
-    #     let errorDisplay = None;
-    #     if error {
-    #         errorDisplay = <div style={{
-    #             "color": "#dc2626",
-    #             "fontSize": "14px",
-    #             "marginBottom": "10px"
-    #         }}>
-    #             {error}
-    #         </div>;
-    #     }
-
-    #     return <div style={{
-    #         "minHeight": "100vh",
-    #         "display": "flex",
-    #         "alignItems": "center",
-    #         "justifyContent": "center",
-    #         "background": "#f5f5f5"
-    #     }}>
-    #         <div style={{
-    #             "background": "#ffffff",
-    #             "padding": "30px",
-    #             "borderRadius": "8px",
-    #             "width": "280px",
-    #             "boxShadow": "0 2px 4px rgba(0,0,0,0.1)"
-    #         }}>
-    #             <h2 style={{"marginBottom": "20px"}}>Login</h2>
-    #             <form onSubmit={handleLogin}>
-    #                 <input
-    #                     type="text"
-    #                     value={username}
-    #                     onChange={handleUsernameChange}
-    #                     placeholder="Username"
-    #                     style={{
-    #                         "width": "100%",
-    #                         "padding": "8px",
-    #                         "marginBottom": "10px",
-    #                         "border": "1px solid #ddd",
-    #                         "borderRadius": "4px",
-    #                         "boxSizing": "border-box"
-    #                     }}
-    #                 />
-    #                 <input
-    #                     type="password"
-    #                     value={password}
-    #                     onChange={handlePasswordChange}
-    #                     placeholder="Password"
-    #                     style={{
-    #                         "width": "100%",
-    #                         "padding": "8px",
-    #                         "marginBottom": "10px",
-    #                         "border": "1px solid #ddd",
-    #                         "borderRadius": "4px",
-    #                         "boxSizing": "border-box"
-    #                     }}
-    #                 />
-    #                 {errorDisplay}
-    #                 <button
-    #                     type="submit"
-    #                     style={{
-    #                         "width": "100%",
-    #                         "padding": "8px",
-    #                         "background": "#3b82f6",
-    #                         "color": "#ffffff",
-    #                         "border": "none",
-    #                         "borderRadius": "4px",
-    #                         "cursor": "pointer",
-    #                         "fontWeight": "600"
-    #                     }}
-    #                 >
-    #                     Login
-    #                 </button>
-    #             </form>
-    #             <p style={{
-    #                 "textAlign": "center",
-    #                 "marginTop": "12px",
-    #                 "fontSize": "14px"
-    #             }}>
-    #                 Need an account? <Link to="/signup">Sign up</Link>
-    #             </p>
-    #         </div>
-    #     </div>;
-    # }
-
-    def LoginPage() -> any {
-    let [username, setUsername] = useState("");
-    let [password, setPassword] = useState("");
-    let [error, setError] = useState("");
-
-    # Check if already logged in
-    if jacIsLoggedIn() {
-        return <div class="p-5">
-            <h2 class="text-xl font-bold">You're already logged in</h2>
-            <button 
-                onClick={lambda -> None { jacLogout(); }} 
-                class="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
-            >
-                Logout
-            </button>
-        </div>;
-    }
-
-    async def handleLogin(e: any) -> None {
-        e.preventDefault();
-        setError("");
-
-        if not username or not password {
-            setError("Please fill in all fields");
-            return;
+        # Check if already logged in
+        if jacIsLoggedIn() {
+            return <div class="p-5">
+                <h2 class="text-xl font-bold">You're already logged in</h2>
+                <button 
+                    onClick={lambda -> None { 
+                        jacLogout(); 
+                        props.setIsLoggedIn(false);
+                        }} 
+                    class="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+                >
+                    Logout
+                </button>
+            </div>;
         }
 
-        success = await jacLogin(username, password);
-        if success {
-            # Navigate to dashboard 
-            window.location.href = "/page/app#/dashboard"; 
-        } else {
-            setError("Invalid credentials");
-        }
+        async def handleLogin(e: any) -> None {
+            e.preventDefault();
+            setError("");
+
+            if not username or not password {
+                setError("Please fill in all fields");
+                return;
+            }
+
+            success = await jacLogin(username, password);
+            if success {
+                # Navigate to dashboard
+                props.setIsLoggedIn(true);
+                window.location.href = "/page/app#/dashboard"; 
+            } else {
+                setError("Invalid credentials");
+            }
     }
 
     def handleUsernameChange(e: any) -> None {
@@ -205,7 +84,7 @@ cl {
     return <div class="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-white">
         
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" class="mx-auto h-10 w-auto" />
+            <img src="/static/assets/icon.svg" alt="Your Company" class="mx-auto h-10 w-auto" />
             <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your account</h2>
         </div>
 
@@ -263,123 +142,7 @@ cl {
     </div>;
 }
 
-    # SignUp page Component ------------------------------------
-    # def SignupPage() -> any {
-    #     let [username, setUsername] = useState("");
-    #     let [password, setPassword] = useState("");
-    #     let [error, setError] = useState("");
-
-    #     async def handleSignup(e: any) -> None {
-    #         e.preventDefault();
-    #         setError("");
-
-    #         if not username or not password {
-    #             setError("Please fill in all fields");
-    #             return;
-    #         }
-
-    #         result = await jacSignup(username, password);
-    #         if result["success"] {
-    #             # window.location.href = "/page/app#/login"
-    #             window.location.href = "/page/app#/dashboard"; # I guess this has a better user experience
-                    
-    #         } else {
-    #             # interesting way of recieving the error message
-    #             setError(result["error"] if result["error"] else "Signup failed");
-    #         }
-    #     }
-
-    #     def handleUsernameChange(e: any) -> None {
-    #         setUsername(e.target.value);
-    #     }
-
-    #     def handlePasswordChange(e: any) -> None {
-    #         setPassword(e.target.value);
-    #     }
-
-    #     let errorDisplay = None;
-    #     if error {
-    #         errorDisplay = <div style={{
-    #             "color": "#dc2626",
-    #             "fontSize": "14px",
-    #             "marginBottom": "10px"
-    #         }}>
-    #             {error}
-    #         </div>;
-    #     }
-
-    #     return <div style={{
-    #         "minHeight": "100vh",
-    #         "display": "flex",
-    #         "alignItems": "center",
-    #         "justifyContent": "center",
-    #         "background": "#f5f5f5"
-    #     }}>
-    #         <div style={{
-    #             "background": "#ffffff",
-    #             "padding": "30px",
-    #             "borderRadius": "8px",
-    #             "width": "280px",
-    #             "boxShadow": "0 2px 4px rgba(0,0,0,0.1)"
-    #         }}>
-    #             <h2 style={{"marginBottom": "20px"}}>Sign Up</h2>
-    #             <form onSubmit={handleSignup}>
-    #                 <input
-    #                     type="text"
-    #                     value={username}
-    #                     onChange={handleUsernameChange}
-    #                     placeholder="Username"
-    #                     style={{
-    #                         "width": "100%",
-    #                         "padding": "8px",
-    #                         "marginBottom": "10px",
-    #                         "border": "1px solid #ddd",
-    #                         "borderRadius": "4px",
-    #                         "boxSizing": "border-box"
-    #                     }}
-    #                 />
-    #                 <input
-    #                     type="password"
-    #                     value={password}
-    #                     onChange={handlePasswordChange}
-    #                     placeholder="Password"
-    #                     style={{
-    #                         "width": "100%",
-    #                         "padding": "8px",
-    #                         "marginBottom": "10px",
-    #                         "border": "1px solid #ddd",
-    #                         "borderRadius": "4px",
-    #                         "boxSizing": "border-box"
-    #                     }}
-    #                 />
-    #                 {errorDisplay}
-    #                 <button
-    #                     type="submit"
-    #                     style={{
-    #                         "width": "100%",
-    #                         "padding": "8px",
-    #                         "background": "#3b82f6",
-    #                         "color": "#ffffff",
-    #                         "border": "none",
-    #                         "borderRadius": "4px",
-    #                         "cursor": "pointer",
-    #                         "fontWeight": "600"
-    #                     }}
-    #                 >
-    #                     Sign Up
-    #                 </button>
-    #             </form>
-    #             <p style={{
-    #                 "textAlign": "center",
-    #                 "marginTop": "12px",
-    #                 "fontSize": "14px"
-    #             }}>
-    #                 Have an account? <Link to="/login">Login</Link>
-    #             </p>
-    #         </div>
-    #     </div>;
-    # }
-    def SignupPage() -> any {
+    def SignupPage(props: any) -> any {
     let [username, setUsername] = useState("");
     let [password, setPassword] = useState("");
     let [error, setError] = useState("");
@@ -395,6 +158,7 @@ cl {
 
         result = await jacSignup(username, password);
         if result["success"] {
+            props.setIsLoggedIn(true);
             window.location.href = "/page/app#/dashboard"; 
         } else {
             setError(result["error"] if result["error"] else "Signup failed");
@@ -418,7 +182,7 @@ cl {
 
     return <div class="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-white">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" class="mx-auto h-10 w-auto" />
+            <img src="/static/assets/icon.svg" alt="Your Company" class="mx-auto h-10 w-auto" />
             <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Create your account</h2>
         </div>
 
@@ -481,7 +245,7 @@ cl {
     }
 
     # Navbar Component
-    def Navbar() -> any {
+    def Navbar(props: any) -> any {
         let isLoggedIn = jacIsLoggedIn();
         # logged in View
         if isLoggedIn {
@@ -495,6 +259,7 @@ cl {
                         onClick={lambda e: any -> None {
                             e.preventDefault(); 
                             jacLogout();
+                            props.setIsLoggedIn(false);
                             window.location.href = "/page/app#/login";
                         }}
                         class="bg-indigo-600 text-white px-3 py-1 rounded-md cursor-pointer font-semibold hover:bg-indigo-700 transition-colors shadow-sm"
@@ -541,12 +306,15 @@ cl {
     # Application Entry Point
     # ----------------------------------------------------
     def app() -> any {
+        let [isLoggedIn, setIsLoggedIn] = useState(jacIsLoggedIn());
+
+
         return <Router>
-            <Navbar />
+            <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignupPage />} />
+                <Route path="/login" element={<LoginPage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
+                <Route path="/signup" element={<SignupPage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
 
                 # for undefined routes
