@@ -1,3 +1,48 @@
+# Backend --------------------
+# Nodes
+node User {
+
+}
+
+node skills {
+
+}
+
+node roles {
+
+}
+
+node courses {
+
+}
+
+node job_posting {
+
+}
+
+
+# Edges 
+edge currently_has {
+
+}
+
+edge target {
+
+}
+
+edge requires_skill {
+
+}
+
+edge teaches {
+
+}
+
+edge interested_in {
+
+}
+
+
 
 # Pages
 cl import from react {useState, useEffect}
@@ -240,43 +285,20 @@ cl {
     def NotFoundPage() -> any {
         return <div class="flex min-h-screen flex-col items-center justify-center p-12 text-center">
             <h1 class="text-4xl font-bold mb-4">404 - Page Not Found</h1>
-            <Link to="/" class="text-indigo-600 font-semibold hover:text-indigo-500">Go Home</Link>
+            <Link to="/dashboard" class="text-indigo-600 font-semibold hover:text-indigo-500">Go Home</Link>
         </div>;
     }
 
-    # Navbar Component
-    # def Navbar(props: any) -> any {
-    #     let isLoggedIn = jacIsLoggedIn();
-    #     # logged in View
-    #     if isLoggedIn {
-    #         return <nav class="bg-white shadow-md border-b border-gray-100 px-6 py-3 flex justify-between items-center">
-    #             <div class="text-indigo-600 font-bold text-lg tracking-tight">Loreim Ipsum</div>
-    #             <div class="flex gap-4 items-center text-sm font-medium">
-    #                 <Link to="/dashboard" class="text-gray-700 hover:text-indigo-600 transition-colors">
-    #                     Dashboard
-    #                 </Link>
-    #                 <button 
-    #                     onClick={lambda e: any -> None {
-    #                         e.preventDefault(); 
-    #                         jacLogout();
-    #                         props.setIsLoggedIn(false);
-    #                         window.location.href = "/page/app#/login";
-    #                     }}
-    #                     class="bg-indigo-600 text-white px-3 py-1 rounded-md cursor-pointer font-semibold hover:bg-indigo-700 transition-colors shadow-sm"
-    #                     >
-    #                     Logout
-    #                 </button>
-    #             </div>
-    #         </nav>;
-    #     }
-    
     # Navbar
     def Navbar(props: any) -> any {
-        let isLoggedIn = isLoggedIn;
+        let isLoggedIn = props.isLoggedIn;
 
-        
+        if not isLoggedIn {
 
-        #  Add highlight logic for current tab
+        }
+
+        let [path, setPath] = useState(window.location.hash);
+
         def isActive(path: str) -> str {
             if window.location.href.includes(path) {
               return "text-indigo-600 border-b-2 border-indigo-600";
@@ -293,19 +315,19 @@ cl {
                             KaziPath
                         </Link>
                         <div class="hidden md:flex space-x-6">
-                            <Link to="/dashboard" class={"px-2 py-1 " + isActive("/dashboard")}>
+                            <Link to="/dashboard" class={"px-2 py-1 " + isActive("/dashboard")} onClick={lambda -> None { setPath("/dashboard"); }}>
                                 Dashboard
                             </Link>
-                            <Link to="/assessment" class={"px-2 py-1 " + isActive("/assessment")}>
+                            <Link to="/assessment" class={"px-2 py-1 " + isActive("/assessment")} onClick={lambda -> None { setPath("/assessment"); }}>
                                 Assessment
                             </Link>
-                            <Link to="/courses" class={"px-2 py-1 " + isActive("/courses")}>
+                            <Link to="/courses" class={"px-2 py-1 " + isActive("/courses")} onClick={lambda -> None { setPath("/courses"); }}>
                                 Courses
                             </Link>
-                            <Link to="/jobs" class={"px-2 py-1 " + isActive("/jobs")}>
+                            <Link to="/jobs" class={"px-2 py-1 " + isActive("/jobs")} onClick={lambda -> None { setPath("/jobs"); }}>
                                 Jobs
                             </Link>
-                            <Link to="/chat" class={"px-2 py-1 " + isActive("/chat")}>
+                            <Link to="/chat" class={"px-2 py-1 " + isActive("/chat")} onClick={lambda -> None { setPath("/chat"); }}>
                                 AI Assistant
                             </Link>
                         </div>
@@ -356,6 +378,8 @@ cl {
                   <div class="ml-4">
                     <p class="text-sm text-gray-600">Completed Courses</p>
                     # TODO: add stats into div
+                    # call the walker to get data from the backend
+                    # 
                     <p class="text-2xl font-bold text-green-600">3</p>
                   </div>
                 </div>
