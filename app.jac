@@ -31,25 +31,19 @@ node JobPosting {
 
 
 # Edges 
-edge currently_has {
-
+edge has_skill {
+    has level: int;
 }
 
-edge target {
-
-}
+edge targets_role {}
 
 edge requires_skill {
-
+    has weight: int;
 }
 
-edge teaches {
+edge teaches_skill {}
 
-}
-
-edge interested_in {
-
-}
+edge demands_skill {}
 
 
 
