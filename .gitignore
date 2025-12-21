@@ -1,3 +1,11 @@
+# Jaseci / Jac Session Files
+*.session
+*.session.users.json
+
+# Generated Configs
+vite.config.js
+.jac-client.configs/
+
 # Dependencies and package manager files
 node_modules/
 yarn.lock
