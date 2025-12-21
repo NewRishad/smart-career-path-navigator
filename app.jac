@@ -1,11 +1,12 @@
-# Backend --------------------
-# Nodes
+# ************************************************************************   BACKEND CODE    ************************************************************************
+# -----------------------------
+#           NODES              |
+# -----------------------------
 node User {
     has username: str;
     has career_goals: str;
     has points: int;
 }
-
 
 node Skill {
     has name: str;
@@ -16,21 +17,19 @@ node Role {
     has name: str;
 }
 
-
 node Course {
     has title: str;
     has difficulty: str;
 }
-
 
 node JobPosting {
     has title: str;
     has company: str;
 }
 
-
-
-# Edges 
+# -----------------------------
+#           EDGES              |
+# -----------------------------
 edge has_skill {
     has level: int;
 }
@@ -45,9 +44,159 @@ edge teaches_skill {}
 
 edge demands_skill {}
 
+ # Walker to fetch user data
+walker fetch_user_data {
+    can start with `root entry {
+        print("Current node: ", here);
+        visit [-->];
+    }
+
+    can on_user with User entry {
+        report here;
+    }
+}
 
 
-# Pages
+# -----------------------------
+#        MAIN LOGIC            |  
+# -----------------------------
+
+walker graph_init {
+
+    can start with `root entry {
+        # Guard: only init once
+        u1 = User(
+            username="test_user",
+            career_goals="Become a Backend Software Engineer",
+            points=0
+        );
+        root ++> u1;
+
+        # -----------------------------
+        # Roles
+        # -----------------------------
+        r1 = Role(name="Backend Developer");
+        r2 = Role(name="Data Engineer");
+        r3 = Role(name="ML Engineer");
+
+        here ++> r1;
+        here ++> r2;
+        here ++> r3;
+
+        # -----------------------------
+        # Skills
+        # -----------------------------
+        s1 = Skill(name="Python", category="Programming");
+        s2 = Skill(name="SQL", category="Databases");
+        s3 = Skill(name="APIs", category="Backend");
+        s4 = Skill(name="Docker", category="DevOps");
+        s5 = Skill(name="Git", category="Tools");
+        s6 = Skill(name="Linux", category="OS");
+        s7 = Skill(name="Data Modeling", category="Data");
+        s8 = Skill(name="Machine Learning", category="AI");
+        s9 = Skill(name="Cloud Basics", category="Cloud");
+        s10 = Skill(name="Problem Solving", category="General");
+
+        here ++> s1;
+        here ++> s2;
+        here ++> s3;
+        here ++> s4;
+        here ++> s5;
+        here ++> s6;
+        here ++> s7;
+        here ++> s8;
+        here ++> s9;
+        here ++> s10;
+
+        # -----------------------------
+        # Courses
+        # -----------------------------
+        c1 = Course(title="Python for Backend Devs", difficulty="beginner");
+        c2 = Course(title="REST APIs with FastAPI", difficulty="intermediate");
+        c3 = Course(title="SQL & Data Modeling", difficulty="beginner");
+        c4 = Course(title="Docker Fundamentals", difficulty="beginner");
+        c5 = Course(title="Intro to Machine Learning", difficulty="intermediate");
+
+        here ++> c1;
+        here ++> c2;
+        here ++> c3;
+        here ++> c4;
+        here ++> c5;
+
+        # -----------------------------
+        # Jobs
+        # -----------------------------
+        j1 = JobPosting(title="Junior Backend Developer", company="TechNova");
+        j2 = JobPosting(title="Backend Engineer", company="Cloudify");
+        j3 = JobPosting(title="Data Engineer I", company="DataWorks");
+        j4 = JobPosting(title="ML Engineer", company="AICorp");
+        j5 = JobPosting(title="Software Engineer", company="StartupX");
+
+        here ++> j1;
+        here ++> j2;
+        here ++> j3;
+        here ++> j4;
+        here ++> j5;
+
+        # -----------------------------
+        # User skills
+        # -----------------------------
+        u1 +>: has_skill(level=3) :+> s1;
+        u1 +>: has_skill(level=2) :+> s2;
+        u1 +>: has_skill(level=2) :+> s5;
+        u1 +>: has_skill(level=1) :+> s10;
+
+        u1 +>: targets_role :+> r1;
+
+        # -----------------------------
+        # Role requirements
+        # -----------------------------
+        r1 +>: requires_skill(weight=3) :+> s1;
+        r1 +>: requires_skill(weight=2) :+> s3;
+        r1 +>: requires_skill(weight=2) :+> s2;
+        r1 +>: requires_skill(weight=1) :+> s4;
+
+        r2 +>: requires_skill(weight=3) :+> s2;
+        r2 +>: requires_skill(weight=2) :+> s7;
+
+        r3 +>: requires_skill(weight=3) :+> s8;
+        r3 +>: requires_skill(weight=2) :+> s1;
+
+        # -----------------------------
+        # Courses → Skills
+        # -----------------------------
+        c1 +>: teaches_skill :+> s1;
+        c2 +>: teaches_skill :+> s3;
+        c3 +>: teaches_skill :+> s2;
+        c4 +>: teaches_skill :+> s4;
+        c5 +>: teaches_skill :+> s8;
+
+        # -----------------------------
+        # Jobs → Skills
+        # -----------------------------
+        j1 +>: demands_skill :+> s1;
+        j1 +>: demands_skill :+> s3;
+
+        j2 +>: demands_skill :+> s1;
+        j2 +>: demands_skill :+> s4;
+
+        j3 +>: demands_skill :+> s2;
+        j3 +>: demands_skill :+> s7;
+
+        j4 +>: demands_skill :+> s8;
+
+        j5 +>: demands_skill :+> s1;
+        j5 +>: demands_skill :+> s10;
+
+        report "Graph initialization complete.";
+    }
+}
+
+
+
+
+# ************************************************************************   FRONTEND CODE    ************************************************************************
+
 cl import from react {useState, useEffect}
 cl import from "@jac-client/utils" {
     Router,
@@ -856,6 +1005,15 @@ def ProfilePage() -> any {
     # ----------------------------------------------------
     def app() -> any {
         let [isLoggedIn, setIsLoggedIn] = useState(jacIsLoggedIn());
+
+        useEffect(lambda -> None {
+            async def load_user_data() -> None {
+                init_result = await root spawn graph_init();
+                result = await root spawn fetch_user_data();
+                console.log(result);
+            }
+            load_user_data();
+        }, []);
 
         return <Router>
             <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />

@@ -164,6 +164,14 @@ function ProfilePage() {
 }
 function app() {
   let [isLoggedIn, setIsLoggedIn] = useState(jacIsLoggedIn());
+  useEffect(() => {
+    async function load_user_data() {
+      let init_result = await __jacSpawn("graph_init", "", {});
+      let result = await __jacSpawn("fetch_user_data", "", {});
+      console.log(result);
+    }
+    load_user_data();
+  }, []);
   return __jacJsx(Router, {}, [__jacJsx(Navbar, {"isLoggedIn": isLoggedIn, "setIsLoggedIn": setIsLoggedIn}, []), __jacJsx(Routes, {}, [__jacJsx(Route, {"path": "/", "element": __jacJsx(HomePage, {}, [])}, []), __jacJsx(Route, {"path": "/login", "element": __jacJsx(LoginPage, {"isLoggedIn": isLoggedIn, "setIsLoggedIn": setIsLoggedIn}, [])}, []), __jacJsx(Route, {"path": "/signup", "element": __jacJsx(SignupPage, {"isLoggedIn": isLoggedIn, "setIsLoggedIn": setIsLoggedIn}, [])}, []), __jacJsx(Route, {"path": "/dashboard", "element": __jacJsx(DashboardPage, {}, [])}, []), __jacJsx(Route, {"path": "/assessment", "element": __jacJsx(AssessmentPage, {}, [])}, []), __jacJsx(Route, {"path": "/chat", "element": __jacJsx(ChatPage, {}, [])}, []), __jacJsx(Route, {"path": "/profile", "element": __jacJsx(ProfilePage, {}, [])}, []), __jacJsx(Route, {"path": "*", "element": __jacJsx(NotFoundPage, {}, [])}, [])])]);
 }
 export { AssessmentPage, ChatPage, DashboardPage, HomePage, LoginPage, Navbar, NotFoundPage, ProfilePage, SignupPage, app };
