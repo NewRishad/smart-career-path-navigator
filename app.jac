@@ -1,24 +1,33 @@
 # Backend --------------------
 # Nodes
 node User {
-
+    has username: str;
+    has career_goals: str;
+    has points: int;
 }
 
-node skills {
 
+node Skill {
+    has name: str;
+    has category: str = "";
 }
 
-node roles {
-
+node Role {
+    has name: str;
 }
 
-node courses {
 
+node Course {
+    has title: str;
+    has difficulty: str;
 }
 
-node job_posting {
 
+node JobPosting {
+    has title: str;
+    has company: str;
 }
+
 
 
 # Edges 
@@ -292,6 +301,7 @@ cl {
     # Navbar
     def Navbar(props: any) -> any {
         let isLoggedIn = props.isLoggedIn;
+        let navigate = useNavigate();
 
         if not isLoggedIn {
 
@@ -305,6 +315,12 @@ cl {
             } else {
               return "text-gray-600 hover:text-indigo-600 transition-colors";
             }
+        }
+
+        def handleLogout() -> None {
+            props.setIsLoggedIn(false);
+            jacLogout();
+            navigate("/login");
         }
         
         return <nav class="bg-white shadow-lg">
@@ -343,6 +359,7 @@ cl {
                         </Link>
                         <button
                         class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                        onclick={handleLogout}
                         >
                         Logout
                         </button>
