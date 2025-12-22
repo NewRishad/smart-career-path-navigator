@@ -164,11 +164,11 @@ function ProfilePage() {
 }
 function app() {
   let [isLoggedIn, setIsLoggedIn] = useState(jacIsLoggedIn());
+  let [graphRestult, setGraphResult] = useState(null);
+  let [result, setResult] = useState(null);
   useEffect(() => {
     async function load_user_data() {
-      let init_result = await __jacSpawn("graph_init", "", {});
-      let result = await __jacSpawn("fetch_user_data", "", {});
-      console.log(result);
+      let graph_init_result = await __jacSpawn("graph_init", "", {});
     }
     load_user_data();
   }, []);
